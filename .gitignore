@@ -1,0 +1,60 @@
+# .gitignore
+
+# Secrets — never commit
+.env
+
+# ChromaDB persisted data
+chroma_store/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+env/
+myvenv/
+
+# Models & data
+models/
+outputs/
+data/sample_docs/*.pdf
+data/sample_docs/*.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# MLflow
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+```
+# WORKFLOW FILE
+WORKFLOW.md
+---
+
+### Why `config.py` is built this way
+
+| Decision | Reason |
+|---|---|
+| `pydantic_settings.BaseSettings` | Auto-reads `.env`, type-validates every field at startup |
+| Single `settings` singleton | All modules import one instance — no scattered `os.getenv()` calls |
+| `validate_settings()` | Catches missing keys immediately at startup, not mid-request |
+| `LLM_TEMPERATURE=0.0` | Deterministic answers — critical for Q&A, not creative generation |
+| `extra="ignore"` | Won't crash if `.env` has extra keys from other tools |
+
+---
